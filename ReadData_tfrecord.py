@@ -7,6 +7,7 @@ import os
 import json 
 
 def read_and_decode(filename):
+    print(filename)
     filename_queue = tf.train.string_input_producer([filename])
 
     reader = tf.TFRecordReader()
