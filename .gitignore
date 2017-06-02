@@ -1,2 +1,3 @@
 *.zip
 *.tfrecords
+/__pycache__/
