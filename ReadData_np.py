@@ -38,8 +38,8 @@ def get_image(image_path):
     return img
 
 def get_sketch(image_path):
-    img = tf.image.convert_image_dtype( tf.image.decode_png( tf.read_file(image_path), channels = 3), dtype=tf.uint8)
-    img = tf.reshape(img, [256, 256, 3])
+    img = tf.image.convert_image_dtype( tf.image.decode_png( tf.read_file(image_path), channels = 4), dtype=tf.uint8)
+    img = tf.reshape(img, [256, 256, 4])
     return img
 
 def ReadData(sess, batch_size = 128):
@@ -99,17 +99,19 @@ def ReadData(sess, batch_size = 128):
         else: 
             si = tf.to_int32(shoes_sketchs[t0])
             print(i, ':', s, si)
-            s = tf.concat(0, [s, si])
+            a = tf.concat([s, si], 0)
         
         if ipos is None:
             ipos = tf.to_int32(shoes_images[t2])
         else:
-            ipos = tf.concat(0, [ipos, tf.to_int32(shoes_images[t2])])
+            iposi = tf.to_int32(shoes_images[t2])
+            ipos = tf.concat([ipos, iposi], 0)
 
         if ineg is None:
             ineg = tf.to_int32(shoes_images[t3])
         else:
-            ineg = tf.concat(0, [ineg, tf.to_int32(shoes_images[t3])])
+            inegi = tf.to_int32(shoes_images[t3])
+            ineg = tf.concat([ineg, inegi], 0)
 
         if i != 0 and i % batch_size == 0:
             print(s, ipos, ineg)
