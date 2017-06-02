@@ -56,7 +56,7 @@ def ReadData(sess, batch_size = 128):
         a = get_image(data_path + '\\' + img)
         shoes_images.append(a)
     print(len(shoes_images))
-    #print(shoes_images[0])
+    print('image :', shoes_images[0])
 
     # Read all sketchs
     shoes_sketchs = []
@@ -66,7 +66,7 @@ def ReadData(sess, batch_size = 128):
         b = get_sketch(data_path + '\\' + img)
         shoes_sketchs.append(b)
     print(len(shoes_sketchs))
-    #print(shoes_sketchs[0])
+    print('sketchs :', shoes_sketchs[0])
 
     '''
     images_triplets = []
@@ -99,12 +99,13 @@ def ReadData(sess, batch_size = 128):
         else: 
             si = tf.to_int32(shoes_sketchs[t0])
             print(i, ':', s, si)
-            a = tf.concat([s, si], 0)
+            s = tf.concat([s, si], 0)
         
         if ipos is None:
             ipos = tf.to_int32(shoes_images[t2])
         else:
             iposi = tf.to_int32(shoes_images[t2])
+            #print(i, ':', ipos, iposi)
             ipos = tf.concat([ipos, iposi], 0)
 
         if ineg is None:
@@ -113,7 +114,7 @@ def ReadData(sess, batch_size = 128):
             inegi = tf.to_int32(shoes_images[t3])
             ineg = tf.concat([ineg, inegi], 0)
 
-        if i != 0 and i % batch_size == 0:
+        if i != 0 and i % (batch_size -1) == 0:
             print(s, ipos, ineg)
             yield s, ipos, ineg
             s = None
@@ -126,6 +127,5 @@ if __name__ == '__main__':
 
     with tf.Session() as sess:
         sess.run(init)
-        a = ReadData(sess)
-        next(a)
+        a = ReadData(sess, 5)
         next(a)

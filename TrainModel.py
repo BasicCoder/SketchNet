@@ -5,7 +5,7 @@ import tensorflow as tf
 import numpy as np 
 import os
 
-from ReadData import ReadData
+from ReadData_np import ReadData
 from SketchNet import SketchNet
 from ImageNetPos import ImageNetPos
 from ImageNetNeg import ImageNetNeg
@@ -17,16 +17,23 @@ training_iters = 200000
 batch_size = 128
 display_step = 20
 margin = 50
+dropout = 0.8
+
+dir_name = r'./CheckPoin/'
 
 def EuclideanDist(a, b):
     return tf.sqrt(tf.reduce_sum(tf.square(a - b), 2))
 
 def run_training():
-    s, ipos, ineg = ReadData()
+    
+    sketchs_placeholder = tf.placeholder(tf.float32)
+    images_neg_placeholder = tf.placeholder(tf.float32)
+    images_pos_placeholder = tf.placeholder(tf.float32)
+    keep_prob = tf.placeholder(tf.float32)
 
-    sketch_dense = SketchNet(s)
-    image_pos_dense = ImageNetPos(ipos)
-    image_neg_dense = ImageNetNeg(ineg)
+    sketch_dense = SketchNet(sketchs_placeholder)
+    image_pos_dense = ImageNetPos(images_neg_placeholder)
+    image_neg_dense = ImageNetNeg(images_pos_placeholder)
 
 
     cost = max(0, margin + EuclideanDist(sketch_dense, image_pos_dense) - EuclideanDist(sketch_dense, image_neg_dense))
@@ -43,14 +50,29 @@ def run_training():
     with tf.Session() as sess:
 
         # Restore the variables or Run the Op to initialize variables
-        latest_ckpt_file = tf.train.latest_checkpoint(os.path.join(FLAGS.logdir, 'ckpt'))
+        latest_ckpt_file = tf.train.latest_checkpoint(os.path.join(dir_name, 'ckpt'))
         if latest_ckpt_file is not None:
             saver.restore(sess, latest_ckpt_file)
             print('Model Restored')
         else:
             sess.run(init)
-
         
+        step = 1
+        dataset = ReadData(sess, batch_size)
+        while step * batch_size < training_iters:
+            s, ipos, ineg = next(dataset)
+
+            sess.run(optimizer, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                                            images_pos_placeholder : ineg, keep_prob: dropout})
+
+            if step * display_step == 0:
+                loss = sess.run(cost, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                                            images_pos_placeholder : ineg, keep_prob: 1.0})
+                print("Iter" + str(step) + ", Minibatch Loss= " + "{:.06f}".format(loss))
+
+            step += 1
+        
+        print("Optimization Finished!")
 
 if __name__ == '__main__':
     run_training()

@@ -37,7 +37,7 @@ biases = {
 
 def SketchNet(_X, _weights = weights, _biases = biases, _dropout = 0.8):
     # Reshape input picture
-    _X = tf.reshape(_X, shape=[-1, 256, 256, 3])
+    _X = tf.reshape(_X, shape=[-1, 256, 256, 4])
 
     # Convolution Layer 1
     conv1 = conv2d('conv1', _X, _weights['wc1'], _biases['bc1'], step = 3)

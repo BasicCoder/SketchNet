@@ -22,7 +22,7 @@ weights = {
     'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
     'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
     'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([ *256, 512])), 
+    'wd1': tf.Variable(tf.random_normal([256, 512])), 
     'wd2': tf.Variable(tf.random_normal([512, 256])),
 }
 biases = {
