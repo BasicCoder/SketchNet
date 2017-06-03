@@ -35,9 +35,12 @@ def run_training():
     image_pos_dense = ImageNetPos(images_neg_placeholder)
     image_neg_dense = ImageNetNeg(images_pos_placeholder)
 
+    print(sketch_dense, image_pos_dense, image_neg_dense)
+    margins = tf.constant(margin, shape = sketch_dense.shape())
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
-    cost = tf.argmax([0, margin + dist_pos - dist_neg], 0)
+    cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
+
 
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
