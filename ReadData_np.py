@@ -54,9 +54,10 @@ def ReadData(sess, batch_size = 128):
     print('Loading train images ...')
     for img in train_images_name:
         a = get_image(data_path + '\\' + img)
+        a = a.eval(session = sess)
         shoes_images.append(a)
     print(len(shoes_images))
-    print('image :', shoes_images[0])
+    print('image :\n', shoes_images[0], sep = '\n')
 
     # Read all sketchs
     shoes_sketchs = []
@@ -64,9 +65,10 @@ def ReadData(sess, batch_size = 128):
     print('Loading train sketches ...')
     for img in train_sketchs_name:
         b = get_sketch(data_path + '\\' + img)
+        b = b.eval(session = sess)
         shoes_sketchs.append(b)
     print(len(shoes_sketchs))
-    print('sketchs :', shoes_sketchs[0])
+    print('sketchs :', shoes_sketchs[0], sep = '\n')
 
     
     s = []
