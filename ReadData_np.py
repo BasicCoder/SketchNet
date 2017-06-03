@@ -138,5 +138,11 @@ if __name__ == '__main__':
 
     with tf.Session() as sess:
         sess.run(init)
-        a = ReadData(sess, 5)
-        next(a)
+
+        data_path = r'E:\work\Python\shoes\train\images\1.jpg'
+        a = get_image(data_path)
+        a = a.eval(session = sess)
+        print('a:', len(a), a[85:160], sep = '\n')
+
+        # a = ReadData(sess, 5)
+        # next(a)
