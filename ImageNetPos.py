@@ -14,8 +14,8 @@ weights = {
     'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
     'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
     'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([7, 7, 256, 512])), 
-    'wd2': tf.Variable(tf.random_normal([1, 1, 512, 256])),
+    'wd1': tf.Variable(tf.random_normal([7*7*256, 512])), 
+    'wd2': tf.Variable(tf.random_normal([512, 256])),
 }
 biases = {
     'bc1': tf.Variable(tf.random_normal([64])),
@@ -70,17 +70,19 @@ def ImageNetPos(_X, _weights = weights, _biases = biases,  dropout_prob = 1.0):
     # Layer 6
     with tf.name_scope('L6') as scope:
         # Fully connected layer 1
-        fc6 = tf.nn.conv2d(pool5, _weights['wd1'], [1, 1, 1, 1], padding='VALID', name='fc6')
-        relu6 = tf.nn.relu(tf.nn.bias_add(fc6, _biases['bd1']), name='relu6')
+        #fc6 = tf.nn.conv2d(pool5, _weights['wd1'], [1, 1, 1, 1], padding='VALID', name='fc6')
+        #relu6 = tf.nn.relu(tf.nn.bias_add(fc6, _biases['bd1']), name='relu6')
+        pool5_flat = tf.reshape(pool5, [-1, 7*7*256])
+        relu6 = tf.nn.relu( tf.matmul(pool5_flat, _weights['wd1']) + _biases['bd1'])
         dropout6 = tf.nn.dropout(relu6, keep_prob=dropout_prob, name='dropout6')
 
     # Layer 7
     with tf.name_scope('L7') as scope:
         # Fully connected layer 2
-        fc7 = tf.nn.conv2d(dropout6, _weights['wd2'], [1, 1, 1, 1], padding='VALID', name='fc7')
-        relu7 = tf.nn.relu(tf.nn.bias_add(fc7, _biases['bd2']), name='relu7')
-        # dropout7 = tf.nn.dropout(relu7, keep_prob=dropout_prob, name='dropout7')
+        #fc7 = tf.nn.conv2d(dropout6, _weights['wd2'], [1, 1, 1, 1], padding='VALID', name='fc7')
+        #relu7 = tf.nn.relu(tf.nn.bias_add(fc7, _biases['bd2']), name='relu7')
+        #dropout7 = tf.nn.dropout(relu7, keep_prob=dropout_prob, name='dropout7')
+        relu7 = tf.nn.relu( tf.matmul(dropout6, _weights['wd2']) + _biases['bd2'])
         dense2 = tf.nn.l2_normalize(relu7, dim = 0, name='fc2')
-
     
     return dense2

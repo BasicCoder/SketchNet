@@ -22,7 +22,7 @@ dropout = 0.8
 dir_name = r'./CheckPoin/'
 
 def EuclideanDist(a, b):
-    return tf.sqrt(tf.reduce_sum(tf.square(a - b), 2))
+    return tf.sqrt(tf.reduce_sum(tf.square(a - b), 1))
 
 def run_training():
     
@@ -35,8 +35,9 @@ def run_training():
     image_pos_dense = ImageNetPos(images_neg_placeholder)
     image_neg_dense = ImageNetNeg(images_pos_placeholder)
 
-
-    cost = max(0, margin + EuclideanDist(sketch_dense, image_pos_dense) - EuclideanDist(sketch_dense, image_neg_dense))
+    dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
+    dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
+    cost = tf.argmax([0, margin + dist_pos - dist_neg], 0)
 
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
