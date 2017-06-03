@@ -16,7 +16,7 @@ learning_rate = 0.001
 training_iters = 200000
 batch_size = 128
 display_step = 20
-margin = 50
+margin = 50.0
 dropout = 0.8
 
 dir_name = r'./CheckPoin/'
@@ -31,12 +31,12 @@ def run_training():
     images_pos_placeholder = tf.placeholder(tf.float32)
     keep_prob = tf.placeholder(tf.float32)
 
-    sketch_dense = SketchNet(sketchs_placeholder)
-    image_pos_dense = ImageNetPos(images_neg_placeholder)
-    image_neg_dense = ImageNetNeg(images_pos_placeholder)
+    sketch_dense = SketchNet(sketchs_placeholder, dropout_prob = keep_prob)
+    image_pos_dense = ImageNetPos(images_neg_placeholder, dropout_prob = keep_prob)
+    image_neg_dense = ImageNetNeg(images_pos_placeholder, dropout_prob = keep_prob)
 
     print(sketch_dense, image_pos_dense, image_neg_dense)
-    margins = tf.constant(margin, shape = sketch_dense.shape())
+    margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size, 256])
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
     cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )

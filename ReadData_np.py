@@ -68,18 +68,27 @@ def ReadData(sess, batch_size = 128):
     print(len(shoes_sketchs))
     print('sketchs :', shoes_sketchs[0])
 
-    '''
-    images_triplets = []
-    for i in range(len(train_triplets)):
-        s = shoes_sketchs[i]
-        for j in range(len(train_triplets[i])):
-            ipos = shoes_images[i][j][0]
-            ineg = shoes_images[i][j][1]
-            images_triplets.append((s, ipos, ineg))    
-
-    print(len(images_triplets))
     
-    tf.train.batch([images_triplets], batch_size = batch_size, num_threads=6)
+    s = []
+    ipos = []
+    ineg = []
+    for i in range(len(train_triplets)):   
+        for j in range(len(train_triplets[i])):
+            s.append(shoes_sketchs[i])
+            ipos.append(shoes_images[i][j][0])
+            ineg.append(shoes_images[i][j][1])
+            length = len(s)
+            if length != 0 and length % batch_size == 0:
+                print(len(s), len(ipos), len(ineg))
+                #print(s, ipos, ineg)
+                yield s, ipos, ineg
+                s = None
+                ipos = None
+                ineg = None
+
+    # print(len(images_triplets))
+    
+    # tf.train.batch([images_triplets], batch_size = batch_size, num_threads=6)
     '''
     
     s = None
@@ -120,7 +129,7 @@ def ReadData(sess, batch_size = 128):
             s = None
             ipos = None
             ineg = None
-
+        '''
 
 if __name__ == '__main__':
     init = tf.global_variables_initializer()
