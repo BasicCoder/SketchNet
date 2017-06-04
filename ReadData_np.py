@@ -45,16 +45,16 @@ def get_sketch(image_path):
 
 def ReadData(sess, batch_size = 128):
 
-    shoes_annotation = r'.\Data\sbir_cvpr2016\shoes\annotation\shoes_annotation.json'
+    shoes_annotation = r'./Data/sbir_cvpr2016/shoes/annotation/shoes_annotation.json'
     print(r'Loading ' + shoes_annotation + r'...')
     test_images_name, test_sketchs_name, test_triplets, train_images_name, train_sketchs_name, train_triplets = LoadTriplets(shoes_annotation)
 
     # Read all images
     shoes_images = []
-    data_path = r'.\Data\sbir_cvpr2016\shoes\train\images'
+    data_path = r'./Data/sbir_cvpr2016/shoes/train/images'
     print('Loading train images ...')
     for img in train_images_name:
-        a = get_image(data_path + '\\' + img)
+        a = get_image(data_path + '/' + img)
         a = a.eval(session = sess)
         shoes_images.append(a)
     print(len(shoes_images))
@@ -68,10 +68,10 @@ def ReadData(sess, batch_size = 128):
 
     # Read all sketchs
     shoes_sketchs = []
-    data_path = r'.\Data\sbir_cvpr2016\shoes\train\sketches'
+    data_path = r'./Data/sbir_cvpr2016/shoes/train/sketches'
     print('Loading train sketches ...')
     for img in train_sketchs_name:
-        b = get_sketch(data_path + '\\' + img)
+        b = get_sketch(data_path + '/' + img)
         b = b.eval(session = sess)
         shoes_sketchs.append(b)
     print(len(shoes_sketchs))
