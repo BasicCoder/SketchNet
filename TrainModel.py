@@ -65,9 +65,10 @@ def run_training():
         while step * batch_size < training_iters:
             s, ipos, ineg = next(dataset)
 
+            print('Start optimizer :', step)
             sess.run(optimizer, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: dropout})
-
+            print('optimizer :', step, 'finised!')
             if step * display_step == 0:
                 loss = sess.run(cost, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: 1.0})
