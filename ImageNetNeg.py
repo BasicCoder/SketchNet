@@ -14,7 +14,7 @@ weights = {
     'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
     'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
     'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([7*7*256, 512])), 
+    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
     'wd2': tf.Variable(tf.random_normal([512, 256])),
 }
 biases = {
@@ -72,7 +72,7 @@ def ImageNetNeg(_X, _weights = weights, _biases = biases, dropout_prob = 1.0):
         # Fully connected layer 1
         #fc6 = tf.nn.conv2d(pool5, _weights['wd1'], [1, 1, 1, 1], padding='VALID', name='fc6')
         #relu6 = tf.nn.relu(tf.nn.bias_add(fc6, _biases['bd1']), name='relu6')
-        pool5_flat = tf.reshape(pool5, [-1, 7*7*256])
+        pool5_flat = tf.reshape(pool5, [-1, 8*8*256])
         relu6 = tf.nn.relu( tf.matmul(pool5_flat, _weights['wd1']) + _biases['bd1'])
         dropout6 = tf.nn.dropout(relu6, keep_prob=dropout_prob, name='dropout6')
 
