@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+import matplotlib.pyplot as plt
 import tensorflow as tf 
 import numpy as np 
 import os 
@@ -44,41 +45,56 @@ def get_sketch(image_path):
 
 def ReadData(sess, batch_size = 128):
 
-    shoes_annotation = r'../shoes_annotation.json'
+    shoes_annotation = r'.\Data\sbir_cvpr2016\shoes\annotation\shoes_annotation.json'
     print(r'Loading ' + shoes_annotation + r'...')
     test_images_name, test_sketchs_name, test_triplets, train_images_name, train_sketchs_name, train_triplets = LoadTriplets(shoes_annotation)
 
     # Read all images
     shoes_images = []
-    data_path = r'E:\work\Python\shoes\train\images'
+    data_path = r'.\Data\sbir_cvpr2016\shoes\train\images'
     print('Loading train images ...')
     for img in train_images_name:
         a = get_image(data_path + '\\' + img)
         a = a.eval(session = sess)
         shoes_images.append(a)
     print(len(shoes_images))
-    print('image :\n', shoes_images[0], sep = '\n')
+    '''
+    print('image :')
+    plt.figure(1)
+    plt.imshow(shoes_images[0])
+    plt.show()
+    plt.close(1)
+    '''
 
     # Read all sketchs
     shoes_sketchs = []
-    data_path = r'E:\work\Python\shoes\train\sketches'
+    data_path = r'.\Data\sbir_cvpr2016\shoes\train\sketches'
     print('Loading train sketches ...')
     for img in train_sketchs_name:
         b = get_sketch(data_path + '\\' + img)
         b = b.eval(session = sess)
         shoes_sketchs.append(b)
     print(len(shoes_sketchs))
-    print('sketchs :', shoes_sketchs[0], sep = '\n')
-
-    
+    '''
+    print('sketchs :')
+    plt.figure(2)
+    plt.imshow(shoes_sketchs[0])
+    plt.show()
+    plt.close(2)
+    '''
     s = []
     ipos = []
     ineg = []
-    for i in range(len(train_triplets)):   
+    for i in range(len(train_triplets)):
+        sk_i = i   
         for j in range(len(train_triplets[i])):
-            s.append(shoes_sketchs[i])
-            ipos.append(shoes_images[i][j][0])
-            ineg.append(shoes_images[i][j][1])
+            s_i = i
+            im_pos_i = train_triplets[sk_i][j][0]
+            im_neg_i = train_triplets[sk_i][j][1]
+            
+            s.append(shoes_sketchs[s_i])
+            ipos.append(shoes_images[im_pos_i])
+            ineg.append(shoes_images[im_neg_i])
             length = len(s)
             if length != 0 and length % batch_size == 0:
                 print(len(s), len(ipos), len(ineg))
@@ -139,10 +155,14 @@ if __name__ == '__main__':
     with tf.Session() as sess:
         sess.run(init)
 
+        '''
         data_path = r'E:\work\Python\shoes\train\images\1.jpg'
         a = get_image(data_path)
         a = a.eval(session = sess)
-        print('a:', len(a), a[85:160], sep = '\n')
+        plt.figure(1)
+        plt.imshow(a)
+        plt.show()
+        '''
 
-        # a = ReadData(sess, 5)
-        # next(a)
+        a = ReadData(sess, 5)
+        next(a)
