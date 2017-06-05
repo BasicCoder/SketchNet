@@ -38,6 +38,7 @@ def run_training():
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
     margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size, 1])
+    print(dist_pos, dist_neg, margins)
     cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
 
 
