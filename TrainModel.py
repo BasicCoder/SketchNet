@@ -16,7 +16,7 @@ learning_rate = 0.001
 training_iters = 300000
 batch_size = 128
 display_step = 20
-save_step = 200
+save_step = 1
 margin = 50.0
 dropout = 0.8
 
@@ -93,6 +93,7 @@ def run_training():
                 print("Saving model checkpoint after {} steps.".format(step))
                 checkpoint_file = os.path.join(dir_name, 'ckpt', 'model.ckpt')
                 saver.save(sess, checkpoint_file, step)
+                print('Checkpoint Saved!')
             step += 1
         
         print("Optimization Finished!")
