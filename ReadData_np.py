@@ -85,7 +85,9 @@ def ReadData(sess, batch_size = 128):
     s = []
     ipos = []
     ineg = []
-    for i in range(len(train_triplets)):
+
+    i = 0
+    while True:
         sk_i = i   
         for j in range(len(train_triplets[i])):
             s_i = i
@@ -95,6 +97,7 @@ def ReadData(sess, batch_size = 128):
             s.append(shoes_sketchs[s_i])
             ipos.append(shoes_images[im_pos_i])
             ineg.append(shoes_images[im_neg_i])
+
             length = len(s)
             if length != 0 and length % batch_size == 0:
                 print(len(s), len(ipos), len(ineg))
@@ -103,7 +106,11 @@ def ReadData(sess, batch_size = 128):
                 s = []
                 ipos = []
                 ineg = []
-
+        
+        i += 1
+        if(i >= len(train_triplets)):
+            i = 0
+            
     # print(len(images_triplets))
     
     # tf.train.batch([images_triplets], batch_size = batch_size, num_threads=6)
