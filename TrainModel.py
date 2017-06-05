@@ -35,9 +35,9 @@ def run_training():
     image_pos_dense = ImageNetPos(images_neg_placeholder, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, dropout_prob = keep_prob)
 
-    margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size, 256])
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
+    margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size, 1])
     cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
 
 
