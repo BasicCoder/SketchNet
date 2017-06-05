@@ -21,5 +21,5 @@ DownLoad Link:( [here](http://www.eecs.qmul.ac.uk/~qian/Qian's%20Materials/sbir_
 ## 4. References:
 - [Sketch Me That Shoe](http://www.eecs.qmul.ac.uk/~qian/Project_cvpr16.html)<br/>
 
-![](https://github.com/BasicCoder/SketchNet/9623213_p0.jpg)
-![](https://github.com/BasicCoder/SketchNet/9956255_p0.jpg)
+![](https://raw.githubusercontent.com/BasicCoder/SketchNet/master/9623213_p0.jpg)
+![](https://raw.githubusercontent.com/BasicCoder/SketchNet/master/9956255_p0.jpg)
