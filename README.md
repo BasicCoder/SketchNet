@@ -12,7 +12,7 @@ SketchNet.py : sketch branch<br/>
 ImageNetNeg.py : Image Negative branch<br/>
 ImageNetPos.py : Image Positive branch<br/>
 	
-ReadData.py : from TFRecord read data
+ReadData.py : from TFRecord read data<br/>
 TrainModel.py : train model
 
 ## 3. Data:
