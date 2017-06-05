@@ -5,15 +5,15 @@
    > - Tensorflow 1.1
 
 ## 2. Code:
-DataGenTFRecord.py : 从原始数据生成 TFRecord
+DataGenTFRecord.py : From raw data generation TFRecord
 	
-三个网络分支:<br/>
-SketchNet.py : sketch 分支<br/>
-ImageNetNeg.py : Image Negative 分支<br/>
-ImageNetPos.py : Image Positive 分支<br/>
+Tree Net Branch:<br/>
+SketchNet.py : sketch branch<br/>
+ImageNetNeg.py : Image Negative branch<br/>
+ImageNetPos.py : Image Positive branch<br/>
 	
-ReadData.py : 从 TFRecord 读取数据
-TrainModel.py : 训练模型
+ReadData.py : from TFRecord read data
+TrainModel.py : train model
 
 ## 3. Data:
 DownLoad Link:( [here](http://www.eecs.qmul.ac.uk/~qian/Qian's%20Materials/sbir_cvpr2016.tar) )
