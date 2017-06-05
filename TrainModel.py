@@ -13,10 +13,10 @@ from ImageNetNeg import ImageNetNeg
 
 data_name = ''
 learning_rate = 0.001
-training_iters = 300000
+training_iters = 128 * 2400
 batch_size = 128
 display_step = 20
-save_step = 1
+save_step = 200
 margin = 50.0
 dropout = 0.8
 
