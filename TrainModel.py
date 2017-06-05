@@ -70,7 +70,7 @@ def run_training():
             sess.run(optimizer, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: dropout})
             print('optimizer :', step, 'finised!')
-            if step * display_step == 0:
+            if step % display_step == 0:
                 loss = sess.run(cost, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: 1.0})
                 print("Iter" + str(step) + ", Minibatch Loss= " + "{:.06f}".format(loss))
