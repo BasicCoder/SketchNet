@@ -16,6 +16,7 @@ learning_rate = 0.001
 training_iters = 200000
 batch_size = 128
 display_step = 20
+save_step = 200
 margin = 50.0
 dropout = 0.8
 
@@ -39,13 +40,18 @@ def run_training():
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
     margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size, 1])
     print(dist_pos, dist_neg, margins)
-    cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
 
+    with tf.name_scope('Loss') as scope:
+        cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
+        tf.summary.scalar("loss", cost)
 
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
     # Add the variable initializer Op to the graph
     init = tf.global_variables_initializer()
+
+    # Merge all summary
+    merged_summary_op = tf.summary.merge_all()
 
     # Create a saver for writing training checkpoints
     saver = tf.train.Saver()
@@ -61,6 +67,8 @@ def run_training():
         else:
             sess.run(init)
         
+        summary_writer = tf.summary.FileWriter('./logs', graph_def=sess.graph_def)
+
         step = 1
         dataset = ReadData(sess, batch_size)
         while step * batch_size < training_iters:
@@ -70,11 +78,21 @@ def run_training():
             sess.run(optimizer, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: dropout})
             print('optimizer :', step, 'finised!')
+
             if step % display_step == 0:
                 loss = sess.run(cost, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: 1.0})
                 print("Iter" + str(step) + ", Minibatch Loss= " + "{:.06f}".format(loss))
-
+                
+                summary_str = sess.run(merged_summary_op, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                                            images_pos_placeholder : ineg, keep_prob: 1.0})
+                summary_writer.add_summary(summary_str, step)
+            
+            # Save Model
+            if step % save_step == 0:
+                print("Saving model checkpoint after {} steps.".format(step))
+                checkpoint_file = os.path.join(dir_name, 'ckpt', 'model.ckpt')
+                saver.save(sess, checkpoint_file, step)
             step += 1
         
         print("Optimization Finished!")
