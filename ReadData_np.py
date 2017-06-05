@@ -100,9 +100,9 @@ def ReadData(sess, batch_size = 128):
                 print(len(s), len(ipos), len(ineg))
                 #print(s, ipos, ineg)
                 yield s, ipos, ineg
-                s = None
-                ipos = None
-                ineg = None
+                s = []
+                ipos = []
+                ineg = []
 
     # print(len(images_triplets))
     
@@ -165,4 +165,5 @@ if __name__ == '__main__':
         '''
 
         a = ReadData(sess, 5)
+        next(a)
         next(a)
