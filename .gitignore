@@ -2,3 +2,4 @@
 *.tfrecords
 /__pycache__/
 /logs/
+/.idea/
