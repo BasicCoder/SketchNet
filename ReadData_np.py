@@ -160,47 +160,7 @@ def ReadData(sess, batch_size = 128, is_train = True):
     # print(len(images_triplets))
     
     # tf.train.batch([images_triplets], batch_size = batch_size, num_threads=6)
-    '''
-    
-    s = None
-    ipos = None
-    ineg = None
-    # yield batch data
-    for i in range(len(shoes_images) * 45):
-        t0 = int(i / 45)
-        t1 = i % 45
 
-        t = train_triplets[t0][t1]
-        t2 = t[0]
-        t3 = t[1]
-        print('t0 =', t0, 't1 =', t1, 't2 =', t2, 't3 =', t3)
-        if s is None:
-            s = tf.to_int32(shoes_sketchs[t0])
-        else: 
-            si = tf.to_int32(shoes_sketchs[t0])
-            print(i, ':', s, si)
-            s = tf.concat([s, si], 0)
-        
-        if ipos is None:
-            ipos = tf.to_int32(shoes_images[t2])
-        else:
-            iposi = tf.to_int32(shoes_images[t2])
-            #print(i, ':', ipos, iposi)
-            ipos = tf.concat([ipos, iposi], 0)
-
-        if ineg is None:
-            ineg = tf.to_int32(shoes_images[t3])
-        else:
-            inegi = tf.to_int32(shoes_images[t3])
-            ineg = tf.concat([ineg, inegi], 0)
-
-        if i != 0 and i % (batch_size -1) == 0:
-            print(s, ipos, ineg)
-            yield s, ipos, ineg
-            s = None
-            ipos = None
-            ineg = None
-        '''
 
 if __name__ == '__main__':
     init = tf.global_variables_initializer()
