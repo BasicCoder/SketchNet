@@ -22,6 +22,27 @@ dropout = 0.8
 
 dir_name = r'./CheckPoin/'
 
+# Store layers weight & bias
+weights = {
+    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
+    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
+    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
+    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
+    'wd2': tf.Variable(tf.random_normal([512, 256])),
+}
+biases = {
+    'bc1': tf.Variable(tf.random_normal([64])),
+    'bc2': tf.Variable(tf.random_normal([128])),
+    'bc3': tf.Variable(tf.random_normal([256])),
+    'bc4': tf.Variable(tf.random_normal([256])),
+    'bc5': tf.Variable(tf.random_normal([256])),
+    'bd1': tf.Variable(tf.random_normal([512])),
+    'bd2': tf.Variable(tf.random_normal([256])),
+}
+
+
 def EuclideanDist(a, b):
     return tf.sqrt(tf.reduce_sum(tf.square(a - b), 1))
 
@@ -33,8 +54,8 @@ def run_training():
     keep_prob = tf.placeholder(tf.float32)
 
     sketch_dense = SketchNet(sketchs_placeholder, dropout_prob = keep_prob)
-    image_pos_dense = ImageNetPos(images_neg_placeholder, dropout_prob = keep_prob)
-    image_neg_dense = ImageNetNeg(images_pos_placeholder, dropout_prob = keep_prob)
+    image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = weights, _biases = biases, dropout_prob = keep_prob)
+    image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = weights, _biases = biases, dropout_prob = keep_prob)
 
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
