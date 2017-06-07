@@ -71,7 +71,7 @@ def run_training():
     images_pos_placeholder = tf.placeholder(tf.float32)
     keep_prob = tf.placeholder(tf.float32)
 
-    sketch_dense = SketchNet(sketchs_placeholder, _weights = sketch_weights, _biases = sketch_biases, dropout_prob = keep_prob)
+    sketch_dense = SketchNet(sketchs_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
 
