@@ -57,18 +57,20 @@ def run_training():
     image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = weights, _biases = biases, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = weights, _biases = biases, dropout_prob = keep_prob)
 
+    # Euclidean Distance
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
     margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size, 1])
     print(dist_pos, dist_neg, margins)
 
     with tf.name_scope('Loss') as scope:
-        cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
+        zeros = tf.constant(0, dtype = tf.float32, shape = [batch_size, 1])
+        cost = tf.reduce_sum( tf.maximum(zeros, margins + dist_pos - dist_neg) )
         tf.summary.scalar("loss", cost)
     
     global_step = tf.Variable(0)
     learning_rate = tf.train.exponential_decay(learning_rate_init, global_step, 100, 0.98, staircase = True, name='learning_rate')
-    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost, global_step = global_step)
+    optimizer = tf.train.AdamOptimizer(learning_rate = learning_rate).minimize(cost, global_step = global_step)
 
     # Add the variable initializer Op to the graph
     init = tf.global_variables_initializer()

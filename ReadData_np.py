@@ -39,8 +39,8 @@ def get_image(image_path):
     return img
 
 def get_sketch(image_path):
-    img = tf.image.convert_image_dtype( tf.image.decode_png( tf.read_file(image_path), channels = 4), dtype=tf.uint8)
-    img = tf.reshape(img, [256, 256, 4])
+    img = tf.image.convert_image_dtype( tf.image.decode_png( tf.read_file(image_path), channels = 3), dtype=tf.uint8)
+    img = tf.reshape(img, [256, 256, 3])
     return img
 
 def read_images(sess, data_path, images_name, is_train):

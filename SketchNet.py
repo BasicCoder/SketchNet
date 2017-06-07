@@ -7,35 +7,15 @@ import os
 
 
 
-# Store layers weight & bias
-weights0 = {
-    'wc1': tf.Variable(tf.random_normal([15, 15, 4, 64])),
-    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
-    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
-    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
-    'wd2': tf.Variable(tf.random_normal([512, 256])),
-}
-biases0 = {
-    'bc1': tf.Variable(tf.random_normal([64])),
-    'bc2': tf.Variable(tf.random_normal([128])),
-    'bc3': tf.Variable(tf.random_normal([256])),
-    'bc4': tf.Variable(tf.random_normal([256])),
-    'bc5': tf.Variable(tf.random_normal([256])),
-    'bd1': tf.Variable(tf.random_normal([512])),
-    'bd2': tf.Variable(tf.random_normal([256])),
-}
-
 def SketchNet(_X, _weights, _biases, dropout_prob = 1.0):
     # Reshape input picture
-    _X = tf.reshape(_X, shape=[-1, 256, 256, 4])
+    _X = tf.reshape(_X, shape=[-1, 256, 256, 3])
 
     # Layer 1
     with tf.name_scope('L1') as scope:
         # Convolution Layer 1
-        conv1 = tf.nn.conv2d(_X,  weights0['wc1'], strides = [1, 3, 3, 1], padding = 'VALID', name = 'conv1')
-        relu1 = tf.nn.relu(tf.nn.bias_add(conv1, biases0['bc1']), name = 'relu1')
+        conv1 = tf.nn.conv2d(_X,  _weights['wc1'], strides = [1, 3, 3, 1], padding = 'VALID', name = 'conv1')
+        relu1 = tf.nn.relu(tf.nn.bias_add(conv1, _biases['bc1']), name = 'relu1')
         # Max Pooling (down-sampling)
         pool1 = tf.nn.max_pool(relu1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1], padding='VALID', name='pool1')
 
