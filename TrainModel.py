@@ -13,8 +13,8 @@ from ImageNetNeg import ImageNetNeg
 
 data_name = ''
 learning_rate_init = 0.001
-training_iters = 128 * 2400
-batch_size = 128
+training_iters = 128 * 1000
+batch_size = 135
 display_step = 20
 save_step = 200
 margin = 50.0
@@ -23,7 +23,7 @@ dropout = 0.8
 dir_name = r'./CheckPoin/'
 
 # Store layers weight & bias
-weights = {
+image_weights = {
     'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
     'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
     'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
@@ -32,7 +32,7 @@ weights = {
     'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
     'wd2': tf.Variable(tf.random_normal([512, 256])),
 }
-biases = {
+image_biases = {
     'bc1': tf.Variable(tf.random_normal([64])),
     'bc2': tf.Variable(tf.random_normal([128])),
     'bc3': tf.Variable(tf.random_normal([256])),
@@ -42,6 +42,24 @@ biases = {
     'bd2': tf.Variable(tf.random_normal([256])),
 }
 
+sketch_weights = {
+    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
+    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
+    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
+    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
+    'wd2': tf.Variable(tf.random_normal([512, 256])),
+}
+sketch_biases = {
+    'bc1': tf.Variable(tf.random_normal([64])),
+    'bc2': tf.Variable(tf.random_normal([128])),
+    'bc3': tf.Variable(tf.random_normal([256])),
+    'bc4': tf.Variable(tf.random_normal([256])),
+    'bc5': tf.Variable(tf.random_normal([256])),
+    'bd1': tf.Variable(tf.random_normal([512])),
+    'bd2': tf.Variable(tf.random_normal([256])),
+}
 
 def EuclideanDist(a, b):
     return tf.sqrt(tf.reduce_sum(tf.square(a - b), 1))
@@ -53,7 +71,7 @@ def run_training():
     images_pos_placeholder = tf.placeholder(tf.float32)
     keep_prob = tf.placeholder(tf.float32)
 
-    sketch_dense = SketchNet(sketchs_placeholder, _weights = weights, _biases = biases, dropout_prob = keep_prob)
+    sketch_dense = SketchNet(sketchs_placeholder, _weights = sketch_weights, _biases = sketch_biases, dropout_prob = keep_prob)
     image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = weights, _biases = biases, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = weights, _biases = biases, dropout_prob = keep_prob)
 
@@ -95,7 +113,7 @@ def run_training():
         summary_writer = tf.summary.FileWriter('./logs', graph_def=sess.graph_def)
 
         step = 1
-        dataset = ReadData(sess, batch_size)
+        dataset = ReadData(sess, batch_size, is_train = True)
         while step * batch_size < training_iters:
             s, ipos, ineg = next(dataset)
 
