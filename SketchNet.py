@@ -27,7 +27,7 @@ biases0 = {
     'bd2': tf.Variable(tf.random_normal([256])),
 }
 
-def SketchNet(_X, _weights = weights, _biases = biases, dropout_prob = 1.0):
+def SketchNet(_X, _weights, _biases, dropout_prob = 1.0):
     # Reshape input picture
     _X = tf.reshape(_X, shape=[-1, 256, 256, 4])
 
