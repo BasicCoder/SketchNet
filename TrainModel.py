@@ -15,9 +15,9 @@ data_name = ''
 learning_rate_init = 0.000001
 training_iters = 135 * 1000
 batch_size = 135
-display_step = 20
+display_step = 5
 save_step = 200
-margin = 10.0
+margin = 1.0 / 304.0
 dropout = 0.8
 
 dir_name = r'./CheckPoin/'
