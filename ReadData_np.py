@@ -6,6 +6,7 @@ import tensorflow as tf
 import numpy as np 
 import os 
 import json 
+import random
 
 test_images_name = []
 test_sketchs_name = []
