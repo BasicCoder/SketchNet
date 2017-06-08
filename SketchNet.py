@@ -39,7 +39,7 @@ def SketchNet(_X, _weights, _biases, dropout_prob = 1.0):
         _activation_summary(relu3)
     # Layer 4
     with tf.name_scope('L4') as scope:
-        #Convolution Layer 4
+        # Convolution Layer 4
         conv4 = tf.nn.conv2d(relu3, _weights['wc4'], [1, 1, 1, 1], padding='SAME', name='conv4')
         relu4 = tf.nn.relu(tf.nn.bias_add(conv4, _biases['bc4']), name='relu4')
         _activation_summary(relu4)

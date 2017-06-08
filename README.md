@@ -7,7 +7,7 @@
 ## 2. Code:
 DataGenTFRecord.py : From raw data generation TFRecord
 	
-Tree Net Branch:<br/>
+Three Net Branch:<br/>
 SketchNet.py : sketch branch<br/>
 ImageNetNeg.py : Image Negative branch<br/>
 ImageNetPos.py : Image Positive branch<br/>
