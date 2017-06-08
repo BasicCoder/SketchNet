@@ -134,7 +134,7 @@ def run_training():
             if step % display_step == 0:
                 summary_str, loss = sess.run([merged_summary_op, cost], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: 1.0})
-                print("Iter" + str(step) + ", Minibatch Loss= " + "{:.06f}".format(loss))
+                print("Iter" + str(step) + ", Minibatch Loss= " + "{:.09f}".format(loss))
                 
                 summary_writer.add_summary(summary_str, step)
             
