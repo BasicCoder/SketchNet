@@ -75,7 +75,7 @@ def ReadData(sess, batch_size = 128, is_train = True):
         '''
         print('image :')
         plt.figure(1)
-        plt.imshow(shoes_images[0])
+        plt.imshow(shoes_images[2])
         plt.show()
         plt.close(1)
         '''
@@ -87,7 +87,7 @@ def ReadData(sess, batch_size = 128, is_train = True):
         '''
         print('sketchs :')
         plt.figure(2)
-        plt.imshow(shoes_sketchs[0])
+        plt.imshow(shoes_sketchs[2])
         plt.show()
         plt.close(2)
         '''
