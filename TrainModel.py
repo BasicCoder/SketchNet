@@ -40,7 +40,7 @@ image_biases = {
     'bc4': tf.Variable(tf.random_normal([256])),
     'bc5': tf.Variable(tf.random_normal([256])),
     'bd1': tf.Variable(tf.random_normal([512])),
-    'bd2': tf.Variable(tf.random_normal([256]),
+    'bd2': tf.Variable(tf.random_normal([256])),
 }
 
 sketch_weights = {
@@ -52,6 +52,7 @@ sketch_weights = {
     'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
     'wd2': tf.Variable(tf.random_normal([512, 256])),
 }
+
 sketch_biases = {
     'bc1': tf.Variable(tf.random_normal([64])),
     'bc2': tf.Variable(tf.random_normal([128])),
@@ -59,7 +60,7 @@ sketch_biases = {
     'bc4': tf.Variable(tf.random_normal([256])),
     'bc5': tf.Variable(tf.random_normal([256])),
     'bd1': tf.Variable(tf.random_normal([512])),
-    'bd2': tf.Variable(tf.random_normal([256]),
+    'bd2': tf.Variable(tf.random_normal([256])),
 }
 
 
