@@ -8,7 +8,7 @@ import os
 def _activation_summary(x):
     tensor_name = x.op.name
     tf.summary.histogram(tensor_name + '/activations', x)
-    tf.summary.scalar(tensor_name + 'sparsity', tf.nn.zero_fraction(x))
+    tf.summary.scalar(tensor_name + '/sparsity', tf.nn.zero_fraction(x))
 
 def SketchNet(_X, _weights, _biases, dropout_prob = 1.0):
     # Reshape input picture

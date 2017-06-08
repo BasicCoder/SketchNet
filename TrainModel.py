@@ -12,12 +12,12 @@ from ImageNetNeg import ImageNetNeg
 
 
 data_name = ''
-learning_rate_init = 0.001
+learning_rate_init = 0.00001
 training_iters = 128 * 1000
 batch_size = 135
 display_step = 20
 save_step = 200
-margin = 50.0
+margin = 10.0
 dropout = 0.8
 
 dir_name = r'./CheckPoin/'
@@ -76,7 +76,10 @@ def run_training():
     sketch_dense = SketchNet(sketchs_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
-
+    tf.summary.tensor_summary("sketch_dense", sketch_dense)
+    tf.summary.tensor_summary("image_pos_dense", image_pos_dense)
+    tf.summary.tensor_summary("image_neg_dense", image_neg_dense)
+    
     # Euclidean Distance
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
