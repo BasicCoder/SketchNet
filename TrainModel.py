@@ -12,8 +12,8 @@ from ImageNetNeg import ImageNetNeg
 
 
 data_name = ''
-learning_rate_init = 0.00001
-training_iters = 128 * 1000
+learning_rate_init = 0.000001
+training_iters = 135 * 1000
 batch_size = 135
 display_step = 20
 save_step = 200
@@ -24,41 +24,41 @@ dir_name = r'./CheckPoin/'
 
 # Store layers weight & bias
 image_weights = {
-    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
-    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
-    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
-    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
-    'wd2': tf.Variable(tf.random_normal([512, 256])),
+    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64], dtype = tf.float64)),
+    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128], dtype = tf.float64)),
+    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256], dtype = tf.float64)),
+    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256], dtype = tf.float64)),
+    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256], dtype = tf.float64)),
+    'wd1': tf.Variable(tf.random_normal([8*8*256, 512], dtype = tf.float64)), 
+    'wd2': tf.Variable(tf.random_normal([512, 256], dtype = tf.float64)),
 }
 image_biases = {
-    'bc1': tf.Variable(tf.random_normal([64])),
-    'bc2': tf.Variable(tf.random_normal([128])),
-    'bc3': tf.Variable(tf.random_normal([256])),
-    'bc4': tf.Variable(tf.random_normal([256])),
-    'bc5': tf.Variable(tf.random_normal([256])),
-    'bd1': tf.Variable(tf.random_normal([512])),
-    'bd2': tf.Variable(tf.random_normal([256])),
+    'bc1': tf.Variable(tf.random_normal([64], dtype = tf.float64)),
+    'bc2': tf.Variable(tf.random_normal([128], dtype = tf.float64)),
+    'bc3': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
+    'bc4': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
+    'bc5': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
+    'bd1': tf.Variable(tf.random_normal([512], dtype = tf.float64)),
+    'bd2': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
 }
 
 sketch_weights = {
-    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
-    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
-    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
-    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
-    'wd2': tf.Variable(tf.random_normal([512, 256])),
+    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64], dtype = tf.float64)),
+    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128], dtype = tf.float64)),
+    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256], dtype = tf.float64)),
+    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256], dtype = tf.float64)),
+    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256], dtype = tf.float64)),
+    'wd1': tf.Variable(tf.random_normal([8*8*256, 512], dtype = tf.float64)), 
+    'wd2': tf.Variable(tf.random_normal([512, 256], dtype = tf.float64)),
 }
 sketch_biases = {
-    'bc1': tf.Variable(tf.random_normal([64])),
-    'bc2': tf.Variable(tf.random_normal([128])),
-    'bc3': tf.Variable(tf.random_normal([256])),
-    'bc4': tf.Variable(tf.random_normal([256])),
-    'bc5': tf.Variable(tf.random_normal([256])),
-    'bd1': tf.Variable(tf.random_normal([512])),
-    'bd2': tf.Variable(tf.random_normal([256])),
+    'bc1': tf.Variable(tf.random_normal([64], dtype = tf.float64)),
+    'bc2': tf.Variable(tf.random_normal([128], dtype = tf.float64)),
+    'bc3': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
+    'bc4': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
+    'bc5': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
+    'bd1': tf.Variable(tf.random_normal([512], dtype = tf.float64)),
+    'bd2': tf.Variable(tf.random_normal([256], dtype = tf.float64)),
 }
 
 
@@ -79,15 +79,15 @@ def run_training():
     tf.summary.tensor_summary("sketch_dense", sketch_dense)
     tf.summary.tensor_summary("image_pos_dense", image_pos_dense)
     tf.summary.tensor_summary("image_neg_dense", image_neg_dense)
-    
+
     # Euclidean Distance
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
-    margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size])
+    margins = tf.constant(margin, dtype = tf.float64, shape = [batch_size])
     print(dist_pos, dist_neg, margins)
 
     with tf.name_scope('Loss') as scope:
-        zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
+        zeros = tf.constant(0.0, dtype = tf.float64, shape = [batch_size])
         cost = tf.reduce_sum( tf.maximum(zeros, margins + dist_pos - dist_neg) )
         tf.summary.scalar("loss", cost)
     
@@ -123,7 +123,7 @@ def run_training():
 
         step = 1
         dataset = ReadData(sess, batch_size, is_train = True)
-        while step * batch_size < training_iters:
+        while step * batch_size <= training_iters:
             s, ipos, ineg = next(dataset)
 
             print('Start optimizer :', step)
