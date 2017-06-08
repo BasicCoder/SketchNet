@@ -128,12 +128,10 @@ def run_training():
             print('optimizer :', step, 'finised!')
 
             if step % display_step == 0:
-                loss = sess.run(cost, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                summary_str, loss = sess.run([merged_summary_op, cost], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: 1.0})
                 print("Iter" + str(step) + ", Minibatch Loss= " + "{:.06f}".format(loss))
                 
-                summary_str = sess.run(merged_summary_op, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
-                                            images_pos_placeholder : ineg, keep_prob: 1.0})
                 summary_writer.add_summary(summary_str, step)
             
             # Save Model
