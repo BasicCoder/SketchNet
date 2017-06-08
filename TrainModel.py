@@ -63,7 +63,7 @@ sketch_biases = {
 
 
 def EuclideanDist(a, b):
-    return tf.sqrt(tf.reduce_sum(tf.square(a - b), 1))
+    return tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(a, b)), 1))
 
 def run_training():
     
@@ -72,6 +72,7 @@ def run_training():
     images_pos_placeholder = tf.placeholder(tf.float32)
     keep_prob = tf.placeholder(tf.float32)
 
+    # Three Branch Net
     sketch_dense = SketchNet(sketchs_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
@@ -79,11 +80,11 @@ def run_training():
     # Euclidean Distance
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
-    margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size, 1])
+    margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size])
     print(dist_pos, dist_neg, margins)
 
     with tf.name_scope('Loss') as scope:
-        zeros = tf.constant(0, dtype = tf.float32, shape = [batch_size, 1])
+        zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
         cost = tf.reduce_sum( tf.maximum(zeros, margins + dist_pos - dist_neg) )
         tf.summary.scalar("loss", cost)
     
