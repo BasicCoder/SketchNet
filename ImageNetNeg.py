@@ -67,7 +67,7 @@ def ImageNetNeg(_X, _weights, _biases, dropout_prob = 1.0):
         #fc7 = tf.nn.conv2d(dropout6, _weights['wd2'], [1, 1, 1, 1], padding='VALID', name='fc7')
         #relu7 = tf.nn.relu(tf.nn.bias_add(fc7, _biases['bd2']), name='relu7')
         #dropout7 = tf.nn.dropout(relu7, keep_prob=dropout_prob, name='dropout7')
-        relu7 = tf.nn.relu( tf.matmul(dropout6, _weights['wd2']) + _biases['bd2'])
+        relu7 = tf.nn.relu( tf.matmul(relu6, _weights['wd2']) + _biases['bd2'])
         dense2 = tf.nn.l2_normalize(relu7, dim = 0, name='fc2')
         _activation_summary(dense2)
     
