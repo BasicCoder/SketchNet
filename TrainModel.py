@@ -17,7 +17,7 @@ training_iters = 135 * 500
 batch_size = 135
 display_step = 5
 save_step = 200
-margin = 1.0 / 304.0
+margin = 10.0
 dropout = 0.8
 
 dir_name = r'./CheckPoin/'
@@ -78,7 +78,7 @@ def run_training():
     keep_prob = tf.placeholder(tf.float32)
 
     # Three Branch Net
-    sketch_dense = SketchNet(sketchs_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
+    sketch_dense = SketchNet(sketchs_placeholder, _weights = sketch_weights, _biases = sketch_biases, dropout_prob = keep_prob)
     image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     tf.summary.tensor_summary("sketch_dense", sketch_dense)
