@@ -71,11 +71,11 @@ def EuclideanDist(a, b):
 
 def run_training():
     
-    with tf.name_scope('Input PlaceHolder') as scope:
-        sketchs_placeholder = tf.placeholder(tf.float32)
-        images_neg_placeholder = tf.placeholder(tf.float32)
-        images_pos_placeholder = tf.placeholder(tf.float32)
-        keep_prob = tf.placeholder(tf.float32)
+
+    sketchs_placeholder = tf.placeholder(tf.float32)
+    images_neg_placeholder = tf.placeholder(tf.float32)
+    images_pos_placeholder = tf.placeholder(tf.float32)
+    keep_prob = tf.placeholder(tf.float32)
 
     # Three Branch Net
     sketch_dense = SketchNet(sketchs_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
