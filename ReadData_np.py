@@ -73,25 +73,12 @@ def ReadData(sess, batch_size = 128, is_train = True):
         data_path = r'./Data/sbir_cvpr2016/shoes/train/images'
         shoes_images = read_images(sess, data_path, train_images_name, is_train)
         print(len(shoes_images))
-        '''
-        print('image :')
-        plt.figure(1)
-        plt.imshow(shoes_images[2])
-        plt.show()
-        plt.close(1)
-        '''
 
         # Read train sketchs
         data_path = r'./Data/sbir_cvpr2016/shoes/train/sketches'
         shoes_sketchs = read_sketchs(sess, data_path, train_sketchs_name, is_train)
         print(len(shoes_sketchs))
-        '''
-        print('sketchs :')
-        plt.figure(2)
-        plt.imshow(shoes_sketchs[2])
-        plt.show()
-        plt.close(2)
-        '''
+
     else:
         # Read tain image
         data_path = r'./Data/sbir_cvpr2016/shoes/test/images'
@@ -114,7 +101,8 @@ def ReadData(sess, batch_size = 128, is_train = True):
 
     if is_train:
         while True:
-            sk_i = random.randint(0, len(shoes_images)-1)   
+            sk_i = random.randint(0, len(shoes_images)-1)
+            
             for j in range(len(train_triplets[sk_i])):
                 im_pos_i = train_triplets[sk_i][j][0]
                 im_neg_i = train_triplets[sk_i][j][1]
@@ -122,7 +110,22 @@ def ReadData(sess, batch_size = 128, is_train = True):
                 s.append(shoes_sketchs[sk_i])
                 ipos.append(shoes_images[im_pos_i])
                 ineg.append(shoes_images[im_neg_i])
+                '''
+                plt.figure(sk_i)
+                plt.imshow(shoes_sketchs[sk_i])
+                plt.show()
+                plt.close(sk_i)
 
+                plt.figure(im_pos_i)
+                plt.imshow(shoes_images[im_pos_i])
+                plt.show()
+                plt.close(im_pos_i)
+
+                plt.figure(im_neg_i)
+                plt.imshow(shoes_images[im_neg_i])
+                plt.show()
+                plt.close(im_neg_i)
+                '''
                 length = len(s)
                 if length != 0 and length % batch_size == 0:
                     print(len(s), len(ipos), len(ineg))
