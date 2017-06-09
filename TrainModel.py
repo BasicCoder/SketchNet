@@ -25,23 +25,23 @@ dir_name = r'./CheckPoin/'
 # Store layers weight & bias
 with tf.name_scope('Image_Weights') as scope:
     image_weights = {
-        'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
-        'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
-        'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
-        'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-        'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-        'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
-        'wd2': tf.Variable(tf.random_normal([512, 256])),
+        'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64]), name = 'wc1'),
+        'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128]), name = 'wc2'),
+        'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256]), name = 'wc3'),
+        'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256]), name = 'wc4'),
+        'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256]), name = 'wc5'),
+        'wd1': tf.Variable(tf.random_normal([8*8*256, 512]), name = 'wd1'), 
+        'wd2': tf.Variable(tf.random_normal([512, 256]), name = 'wd2'),
     }
 with tf.name_scope('Image_Biases') as scope:
     image_biases = {
-        'bc1': tf.Variable(tf.random_normal([64])),
-        'bc2': tf.Variable(tf.random_normal([128])),
-        'bc3': tf.Variable(tf.random_normal([256])),
-        'bc4': tf.Variable(tf.random_normal([256])),
-        'bc5': tf.Variable(tf.random_normal([256])),
-        'bd1': tf.Variable(tf.random_normal([512])),
-        'bd2': tf.Variable(tf.random_normal([256])),
+        'bc1': tf.Variable(tf.random_normal([64]), name = 'bc1'),
+        'bc2': tf.Variable(tf.random_normal([128]), name = 'bc2'),
+        'bc3': tf.Variable(tf.random_normal([256]), name = 'bc3'),
+        'bc4': tf.Variable(tf.random_normal([256]), name = 'bc4'),
+        'bc5': tf.Variable(tf.random_normal([256]), name = 'bc5'),
+        'bd1': tf.Variable(tf.random_normal([512]), name = 'bd1'),
+        'bd2': tf.Variable(tf.random_normal([256]), name = 'bd2'),
     }
 
 with tf.name_scope('Sketch_Weights') as scope:

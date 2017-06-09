@@ -110,22 +110,7 @@ def ReadData(sess, batch_size = 128, is_train = True):
                 s.append(shoes_sketchs[sk_i])
                 ipos.append(shoes_images[im_pos_i])
                 ineg.append(shoes_images[im_neg_i])
-                '''
-                plt.figure(sk_i)
-                plt.imshow(shoes_sketchs[sk_i])
-                plt.show()
-                plt.close(sk_i)
 
-                plt.figure(im_pos_i)
-                plt.imshow(shoes_images[im_pos_i])
-                plt.show()
-                plt.close(im_pos_i)
-
-                plt.figure(im_neg_i)
-                plt.imshow(shoes_images[im_neg_i])
-                plt.show()
-                plt.close(im_neg_i)
-                '''
                 length = len(s)
                 if length != 0 and length % batch_size == 0:
                     print(len(s), len(ipos), len(ineg))
@@ -181,5 +166,20 @@ if __name__ == '__main__':
         '''
 
         a = ReadData(sess, 5, True)
-        next(a)
-        next(a)
+        while i <= 1:
+            next(a)
+            plt.figure(sk_i)
+            plt.imshow(shoes_sketchs[sk_i])
+            plt.show()
+            plt.close(sk_i)
+
+            plt.figure(im_pos_i)
+            plt.imshow(shoes_images[im_pos_i])
+            plt.show()
+            plt.close(im_pos_i)
+
+            plt.figure(im_neg_i)
+            plt.imshow(shoes_images[im_neg_i])
+            plt.show()
+            plt.close(im_neg_i)
+            next(a)
