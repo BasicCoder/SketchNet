@@ -12,13 +12,13 @@ from ImageNetNeg import ImageNetNeg
 
 
 data_name = ''
-learning_rate_init = 0.001
+learning_rate_init = 0.01
 training_iters = 135 * 500
 batch_size = 135
 display_step = 5
 save_step = 200
 margin = 10.0
-dropout = 0.8
+dropout = 0.9
 
 dir_name = r'./CheckPoin/'
 

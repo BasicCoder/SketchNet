@@ -89,9 +89,9 @@ def SketchNet(_X, _weights, _biases, dropout_prob = 1.0):
         #relu6 = tf.nn.relu(tf.nn.bias_add(fc6, _biases['bd1']), name='relu6')
         tf.summary.histogram('Weight', _weights['wd1'])
         pool5_flat = tf.reshape(pool5, [-1, 8*8*256])
-        relu6 = tf.nn.relu( tf.matmul(pool5_flat, _weights['wd1']) + _biases['bd1'])
-        dropout6 = tf.nn.dropout(relu6, keep_prob=dropout_prob, name='dropout6')
-        _activation_summary(dropout6)
+        dropout6 = tf.nn.dropout(pool5_flat, keep_prob=dropout_prob, name='dropout6')
+        relu6 = tf.nn.relu( tf.matmul(dropout6, _weights['wd1']) + _biases['bd1']) 
+        _activation_summary(relu6)
 
     # Layer 7
     with tf.name_scope('Sketch_L7') as scope:
@@ -100,7 +100,7 @@ def SketchNet(_X, _weights, _biases, dropout_prob = 1.0):
         #relu7 = tf.nn.relu(tf.nn.bias_add(fc7, _biases['bd2']), name='relu7')
         #dropout7 = tf.nn.dropout(relu7, keep_prob=dropout_prob, name='dropout7')
         tf.summary.histogram('Weight', _weights['wd2'])
-        relu7 = tf.nn.relu( tf.matmul(dropout6, _weights['wd2']) + _biases['bd2'])
+        relu7 = tf.nn.relu( tf.matmul(relu6, _weights['wd2']) + _biases['bd2'])
         dense2 = tf.nn.l2_normalize(relu7, dim = 0, name='fc2')
         _activation_summary(dense2)
     
