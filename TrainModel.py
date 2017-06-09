@@ -23,45 +23,47 @@ dropout = 0.8
 dir_name = r'./CheckPoin/'
 
 # Store layers weight & bias
-image_weights = {
-    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
-    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
-    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
-    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
-    'wd2': tf.Variable(tf.random_normal([512, 256])),
-}
+with tf.name_scope('Image_Weights') as scope:
+    image_weights = {
+        'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
+        'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
+        'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
+        'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+        'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+        'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
+        'wd2': tf.Variable(tf.random_normal([512, 256])),
+    }
+with tf.name_scope('Image_Biases') as scope:
+    image_biases = {
+        'bc1': tf.Variable(tf.random_normal([64])),
+        'bc2': tf.Variable(tf.random_normal([128])),
+        'bc3': tf.Variable(tf.random_normal([256])),
+        'bc4': tf.Variable(tf.random_normal([256])),
+        'bc5': tf.Variable(tf.random_normal([256])),
+        'bd1': tf.Variable(tf.random_normal([512])),
+        'bd2': tf.Variable(tf.random_normal([256])),
+    }
 
-image_biases = {
-    'bc1': tf.Variable(tf.random_normal([64])),
-    'bc2': tf.Variable(tf.random_normal([128])),
-    'bc3': tf.Variable(tf.random_normal([256])),
-    'bc4': tf.Variable(tf.random_normal([256])),
-    'bc5': tf.Variable(tf.random_normal([256])),
-    'bd1': tf.Variable(tf.random_normal([512])),
-    'bd2': tf.Variable(tf.random_normal([256])),
-}
-
-sketch_weights = {
-    'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
-    'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
-    'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
-    'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
-    'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
-    'wd2': tf.Variable(tf.random_normal([512, 256])),
-}
-
-sketch_biases = {
-    'bc1': tf.Variable(tf.random_normal([64])),
-    'bc2': tf.Variable(tf.random_normal([128])),
-    'bc3': tf.Variable(tf.random_normal([256])),
-    'bc4': tf.Variable(tf.random_normal([256])),
-    'bc5': tf.Variable(tf.random_normal([256])),
-    'bd1': tf.Variable(tf.random_normal([512])),
-    'bd2': tf.Variable(tf.random_normal([256])),
-}
+with tf.name_scope('Sketch_Weights') as scope:
+    sketch_weights = {
+        'wc1': tf.Variable(tf.random_normal([15, 15, 3, 64])),
+        'wc2': tf.Variable(tf.random_normal([5, 5, 64, 128])),
+        'wc3': tf.Variable(tf.random_normal([3, 3, 128, 256])),
+        'wc4': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+        'wc5': tf.Variable(tf.random_normal([3, 3, 256, 256])),
+        'wd1': tf.Variable(tf.random_normal([8*8*256, 512])), 
+        'wd2': tf.Variable(tf.random_normal([512, 256])),
+    }
+with tf.name_scope('Sketch_Biases') as scope:
+    sketch_biases = {
+        'bc1': tf.Variable(tf.random_normal([64])),
+        'bc2': tf.Variable(tf.random_normal([128])),
+        'bc3': tf.Variable(tf.random_normal([256])),
+        'bc4': tf.Variable(tf.random_normal([256])),
+        'bc5': tf.Variable(tf.random_normal([256])),
+        'bd1': tf.Variable(tf.random_normal([512])),
+        'bd2': tf.Variable(tf.random_normal([256])),
+    }
 
 
 def EuclideanDist(a, b):
@@ -69,10 +71,11 @@ def EuclideanDist(a, b):
 
 def run_training():
     
-    sketchs_placeholder = tf.placeholder(tf.float32)
-    images_neg_placeholder = tf.placeholder(tf.float32)
-    images_pos_placeholder = tf.placeholder(tf.float32)
-    keep_prob = tf.placeholder(tf.float32)
+    with tf.name_scope('Input PlaceHolder') as scope:
+        sketchs_placeholder = tf.placeholder(tf.float32)
+        images_neg_placeholder = tf.placeholder(tf.float32)
+        images_pos_placeholder = tf.placeholder(tf.float32)
+        keep_prob = tf.placeholder(tf.float32)
 
     # Three Branch Net
     sketch_dense = SketchNet(sketchs_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)

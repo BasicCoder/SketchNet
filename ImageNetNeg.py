@@ -15,7 +15,7 @@ def _activation_summary(x):
 def ImageNetNeg(_X, _weights, _biases, dropout_prob = 1.0):
     # Reshape input picture
     _X = tf.reshape(_X, shape=[-1, 256, 256, 3])
-
+    tf.summary.image('Image_Neg', _X, 20)
     # Layer 1
     with tf.name_scope('Image_Neg_L1') as scope:
         # Convolution Layer 1
