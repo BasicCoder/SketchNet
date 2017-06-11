@@ -79,7 +79,7 @@ def run_training():
     keep_prob = tf.placeholder(tf.float32)
 
     # Three Branch Net
-    sketch_dense = SketchNet(sketchs_placeholder, _weights = sketch_weights, _biases = sketch_biases, dropout_prob = keep_prob)
+    sketch_dense = SketchNet(sketchs_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_pos_dense = ImageNetPos(images_neg_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     image_neg_dense = ImageNetNeg(images_pos_placeholder, _weights = image_weights, _biases = image_biases, dropout_prob = keep_prob)
     tf.summary.tensor_summary("sketch_dense", sketch_dense)
@@ -97,9 +97,9 @@ def run_training():
         regularizers = tf.nn.l2_loss(image_weights['wc1']) + tf.nn.l2_loss(image_weights['wc2']) + tf.nn.l2_loss(image_weights['wc3']) \
                         + tf.nn.l2_loss(image_weights['wc4']) + tf.nn.l2_loss(image_weights['wc5']) + tf.nn.l2_loss(image_weights['wd1']) \
                         + tf.nn.l2_loss(image_weights['wd2']) \
-                        + tf.nn.l2_loss(sketch_weights['wc1']) + tf.nn.l2_loss(sketch_weights['wc2']) + tf.nn.l2_loss(sketch_weights['wc3']) \
-                        + tf.nn.l2_loss(sketch_weights['wc4']) + tf.nn.l2_loss(sketch_weights['wc5']) + tf.nn.l2_loss(sketch_weights['wd1']) \
-                        + tf.nn.l2_loss(sketch_weights['wd2'])
+                        #+ tf.nn.l2_loss(sketch_weights['wc1']) + tf.nn.l2_loss(sketch_weights['wc2']) + tf.nn.l2_loss(sketch_weights['wc3']) \
+                        #+ tf.nn.l2_loss(sketch_weights['wc4']) + tf.nn.l2_loss(sketch_weights['wc5']) + tf.nn.l2_loss(sketch_weights['wd1']) \
+                        #+ tf.nn.l2_loss(sketch_weights['wd2'])
         cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) ) + beta * regularizers
         tf.summary.scalar("loss", cost)
     
