@@ -19,7 +19,7 @@ display_step = 5
 save_step = 200
 margin = 50.0
 dropout = 0.9
-beta = 0.001
+beta = 1e-5
 
 dir_name = r'./CheckPoin/'
 
