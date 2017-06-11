@@ -97,12 +97,10 @@ def ReadData(sess, batch_size = 128, is_train = True):
     ineg = []
 
     if is_train:
-        i = 0
         while True:
-            sk_i = i
+            sk_i = random.randint(0, len(shoes_images)-1)
             
             for j in range(len(train_triplets[sk_i])):
-                sk_i = i
                 im_pos_i = train_triplets[sk_i][j][0]
                 im_neg_i = train_triplets[sk_i][j][1]
                 
@@ -118,9 +116,7 @@ def ReadData(sess, batch_size = 128, is_train = True):
                     s = []
                     ipos = []
                     ineg = []
-            i += 1
-            if(i >= len(train_triplets)):
-                i = 0
+
     else:
         i = 0
         while True:
