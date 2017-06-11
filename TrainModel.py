@@ -94,7 +94,7 @@ def run_training():
     with tf.name_scope('Loss') as scope:
         zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
         cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
-        tf.summary.scalar("loss", cost * 100.0)
+        tf.summary.scalar("loss", cost * 10.0)
     
     with tf.name_scope('Optimizer') as scope:
         global_step = tf.Variable(0)
@@ -139,7 +139,7 @@ def run_training():
             if step % display_step == 0:
                 summary_str, loss = sess.run([merged_summary_op, cost], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: 1.0})
-                print("Iter" + str(step) + ", Minibatch Loss= " + "{:.09f}".format(loss*100))
+                print("Iter" + str(step) + ", Minibatch Loss= " + "{:.09f}".format(loss*10.0))
                 
                 summary_writer.add_summary(summary_str, step)
             
