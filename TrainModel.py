@@ -94,7 +94,7 @@ def run_training():
     with tf.name_scope('Loss') as scope:
         zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
         cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
-        tf.summary.scalar("loss", cost * 100)
+        tf.summary.scalar("loss", cost * 100.0)
     
     with tf.name_scope('Optimizer') as scope:
         global_step = tf.Variable(0)
