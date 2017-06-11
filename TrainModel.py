@@ -13,7 +13,7 @@ from ImageNetNeg import ImageNetNeg
 
 data_name = ''
 learning_rate_init = 0.01
-training_iters = 135 * 500
+training_iters = 135 * 1000
 batch_size = 135
 display_step = 5
 save_step = 200
@@ -94,7 +94,7 @@ def run_training():
     with tf.name_scope('Loss') as scope:
         zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
         cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) )
-        tf.summary.scalar("loss", cost)
+        tf.summary.scalar("loss", cost * 100)
     
     with tf.name_scope('Optimizer') as scope:
         global_step = tf.Variable(0)
