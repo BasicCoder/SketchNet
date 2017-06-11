@@ -96,8 +96,11 @@ def run_training():
         zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
         regularizers = tf.nn.l2_loss(image_weights['wc1']) + tf.nn.l2_loss(image_weights['wc2']) + tf.nn.l2_loss(image_weights['wc3']) \
                         + tf.nn.l2_loss(image_weights['wc4']) + tf.nn.l2_loss(image_weights['wc5']) + tf.nn.l2_loss(image_weights['wd1']) \
-                        + tf.nn.l2_loss(image_weights['wd2'])
-        cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) ) + beta * reregularizers
+                        + tf.nn.l2_loss(image_weights['wd2']) \
+                        + tf.nn.l2_loss(sketch_weights['wc1']) + tf.nn.l2_loss(sketch_weights['wc2']) + tf.nn.l2_loss(sketch_weights['wc3']) \
+                        + tf.nn.l2_loss(sketch_weights['wc4']) + tf.nn.l2_loss(sketch_weights['wc5']) + tf.nn.l2_loss(sketch_weights['wd1']) \
+                        + tf.nn.l2_loss(sketch_weights['wd2'])
+        cost = tf.reduce_sum( tf.nn.relu(margins + dist_pos - dist_neg) ) + beta * regularizers
         tf.summary.scalar("loss", cost)
     
     with tf.name_scope('Optimizer') as scope:
