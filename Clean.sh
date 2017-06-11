@@ -1,6 +1,6 @@
 #!/bin/bash 
 #clean Save Model
-rm ./CheckPoint/ckpt/*
+rm ./CheckPoin/ckpt/*
 
 #clean Save logs
 
