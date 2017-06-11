@@ -101,7 +101,7 @@ def SketchNet(_X, _weights, _biases, dropout_prob = 1.0):
         #dropout7 = tf.nn.dropout(relu7, keep_prob=dropout_prob, name='dropout7')
         tf.summary.histogram('Weight', _weights['wd2'])
         relu7 = tf.nn.relu( tf.matmul(relu6, _weights['wd2']) + _biases['bd2'])
-        dense2 = tf.nn.l2_normalize(relu7, dim = 0, name='fc2')
+        dense2 = tf.nn.l2_normalize(relu7, dim = 1, name='fc2')
         _activation_summary(dense2)
     
     return dense2
