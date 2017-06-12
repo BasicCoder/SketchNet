@@ -139,7 +139,7 @@ def run_training():
             sess.run(init)
         
         summary_writer = tf.summary.FileWriter('./logs', graph_def=sess.graph_def)
-
+        '''
         # train
         step = 1
         train_data = ReadData(sess, batch_size, is_train = True)
@@ -167,22 +167,22 @@ def run_training():
             step += 1
         
         print("Optimization Finished!")
-
+        '''
 
         # test 
         test_data = ReadData(sess, batch_size, is_train = False)
         index = 1
-        while index * batch_size <= 38*45:
+        while index * batch_size <= 115*45:
             s, ipos, ineg = next(test_data)
 
             pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                             images_pos_placeholder : ineg, keep_prob: 1.0})
-            print(pos_val, neg_val, sep = '\n')
+            
             count1 = Count(pos_val[0:45], neg_val[0:45])
             count2 = Count(pos_val[45:90], neg_val[45:90])
             count3 = Count(pos_val[90:135], neg_val[45:90])
-            print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + 'Second : ' + '{:.09f}'.format(count2 / 45.0) + 'Third : ' + '{:.09f}'.format(count3 / 45.0))
-            print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 45.0))
+            print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + ' Second : ' + '{:.09f}'.format(count2 / 45.0) + ' Third : ' + '{:.09f}'.format(count3 / 45.0))
+            print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 135.0))
             index += 1
 
 
