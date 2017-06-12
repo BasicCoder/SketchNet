@@ -172,6 +172,7 @@ def run_training():
         # test 
         test_data = ReadData(sess, batch_size, is_train = False)
         index = 1
+        count = 0
         while index * batch_size <= 115*45:
             s, ipos, ineg = next(test_data)
 
@@ -181,10 +182,13 @@ def run_training():
             count1 = Count(pos_val[0:45], neg_val[0:45])
             count2 = Count(pos_val[45:90], neg_val[45:90])
             count3 = Count(pos_val[90:135], neg_val[45:90])
+            count += (count1 + count3 + count3)
+            print('Batch test: ', index)
             print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + ' Second : ' + '{:.09f}'.format(count2 / 45.0) + ' Third : ' + '{:.09f}'.format(count3 / 45.0))
             print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 135.0))
             index += 1
-
+        
+        print('Total Accuracy : ', '{:.09f}'.format(count / (115*45)))
 
 if __name__ == '__main__':
     run_training()
