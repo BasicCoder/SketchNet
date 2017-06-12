@@ -17,8 +17,8 @@ training_iters = 135 * 5000
 batch_size = 135
 display_step = 5
 save_step = 200
-margin = 50.0
-dropout = 0.9
+margin = 1.0 / 407
+dropout = 0.8
 beta = 1e-5
 
 dir_name = r'./CheckPoin/'
