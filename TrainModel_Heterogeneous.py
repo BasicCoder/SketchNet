@@ -13,7 +13,7 @@ from ImageNetNeg import ImageNetNeg
 
 data_name = ''
 learning_rate_init = 0.01
-training_iters = 135 * 1000
+training_iters = 135 * 10000
 batch_size = 135
 display_step = 5
 save_step = 200
@@ -112,7 +112,7 @@ def run_training():
     
     with tf.name_scope('Optimizer') as scope:
         global_step = tf.Variable(0)
-        learning_rate = tf.train.exponential_decay(learning_rate_init, global_step, 100, 0.98, staircase = True, name='learning_rate')
+        learning_rate = tf.train.exponential_decay(learning_rate_init, global_step, 200, 0.98, staircase = True, name='learning_rate')
         optimizer = tf.train.AdamOptimizer(learning_rate = learning_rate).minimize(cost, global_step = global_step)
         tf.summary.scalar('global step', global_step)
         tf.summary.scalar('learning_rate', learning_rate)
