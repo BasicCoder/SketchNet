@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import tensorflow as tf 
 import numpy as np 
 import os 
@@ -128,7 +128,7 @@ def ReadData(sess, batch_size = 128, is_train = True):
             for j in range(len(test_triplets[i])):
                 sk_i = i
                 im_pos_i = test_triplets[sk_i][j][0]
-                im_neg_i = test_triplets[sk_i][j][0]
+                im_neg_i = test_triplets[sk_i][j][1]
 
                 s.append(shoes_sketchs[sk_i])
                 ipos.append(shoes_images[im_pos_i])
@@ -166,21 +166,24 @@ if __name__ == '__main__':
         plt.show()
         '''
 
-        a = ReadData(sess, 5, True)
-        while i <= 1:
-            next(a)
-            plt.figure(sk_i)
-            plt.imshow(shoes_sketchs[sk_i])
+        a = ReadData(sess, 5, False)
+        i = 0
+        s, ipos, ineg = next(a)
+        while i < 5:
+            plt.figure(i)
+            plt.imshow(s[i])
             plt.show()
-            plt.close(sk_i)
+            plt.close(i)
 
-            plt.figure(im_pos_i)
-            plt.imshow(shoes_images[im_pos_i])
+            plt.figure(i)
+            plt.imshow(ipos[i])
             plt.show()
-            plt.close(im_pos_i)
+            plt.close(i)
 
-            plt.figure(im_neg_i)
-            plt.imshow(shoes_images[im_neg_i])
+            plt.figure(i)
+            plt.imshow(ineg[i])
             plt.show()
-            plt.close(im_neg_i)
-            next(a)
+            plt.close(i)
+
+            i += 1
+        next(a)
