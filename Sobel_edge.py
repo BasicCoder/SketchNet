@@ -28,9 +28,9 @@ def ProcessImagesData():
     print(r'Loading ' + shoes_annotation + r'...')
     test_images_name, test_sketchs_name, test_triplets, train_images_name, train_sketchs_name, train_triplets = LoadTriplets(shoes_annotation)
 
-    img_path = r'./Data/sbir_cvpr2016/shoes/train/images/'
-    write_img_path = r'./Data/sbir_cvpr2016/shoes/train/canny_images/'
-    for img in train_images_name:
+    img_path = r'./Data/sbir_cvpr2016/shoes/test/images/'
+    write_img_path = r'./Data/sbir_cvpr2016/shoes/test/canny_images/'
+    for img in test_images_name:
         print('Process ' + img + '...')
         image = cv2.imread(img_path + img)
         image = cv2.GaussianBlur(image, (3, 3), 0)

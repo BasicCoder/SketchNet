@@ -70,6 +70,13 @@ with tf.name_scope('Sketch_Biases') as scope:
 def EuclideanDist(a, b):
     return tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(a, b)), 1))
 
+def Count(a, b):
+    count = 0
+    for i in range(45):
+        if a[i] < b[i]:
+            count += 1
+    return count
+
 def run_training():
     
 
@@ -133,10 +140,11 @@ def run_training():
         
         summary_writer = tf.summary.FileWriter('./logs', graph_def=sess.graph_def)
 
+        # train
         step = 1
-        dataset = ReadData(sess, batch_size, is_train = True)
+        train_data = ReadData(sess, batch_size, is_train = True)
         while step * batch_size <= training_iters:
-            s, ipos, ineg = next(dataset)
+            s, ipos, ineg = next(train_data)
 
             print('Start optimizer :', step)
             sess.run(optimizer, feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
@@ -159,6 +167,24 @@ def run_training():
             step += 1
         
         print("Optimization Finished!")
+
+
+        # test 
+        test_data = ReadData(sess, batch_size, is_train = False)
+        index = 1
+        while index * batch_size <= 38*45:
+            s, ipos, ineg = next(test_data)
+
+            pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                                            images_pos_placeholder : ineg, keep_prob: 1.0})
+            print(pos_val, neg_val, sep = '\n')
+            count1 = Count(pos_val[0:45], neg_val[0:45])
+            count2 = Count(pos_val[45:90], neg_val[45:90])
+            count3 = Count(pos_val[90:135], neg_val[45:90])
+            print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + 'Second : ' + '{:.09f}'.format(count2 / 45.0) + 'Third : ' + '{:.09f}'.format(count3 / 45.0))
+            print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 45.0))
+            index += 1
+
 
 if __name__ == '__main__':
     run_training()
