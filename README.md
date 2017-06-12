@@ -8,12 +8,18 @@
 DataGenTFRecord.py : From raw data generation TFRecord
 	
 Three Net Branch:<br/>
-SketchNet.py : sketch branch<br/>
-ImageNetNeg.py : Image Negative branch<br/>
-ImageNetPos.py : Image Positive branch<br/>
+> - SketchNet.py : sketch branch<br/>
+> - ImageNetNeg.py : Image Negative branch<br/>
+> - ImageNetPos.py : Image Positive branch<br/>
 	
-ReadData.py : from TFRecord read data<br/>
-TrainModel.py : train model
+ReadData:<br/>
+> - ReadData_tfrecord.py : from TFRecord read data<br/>
+> - ReadData_np.py: Read Data in order<br/>
+> - ReadData_Random.py : Read Data in random<br/>
+	
+TrainModel:<br/>
+> - TrainModel_Siamese.py : Siamese  architecture<br/>
+> - TrainModel_Heterogeneous.py : Heterogeneous architecture<br/>
 
 ## 3. Data:
 DownLoad Link:( [here](http://www.eecs.qmul.ac.uk/~qian/Qian's%20Materials/sbir_cvpr2016.tar) )
