@@ -182,7 +182,7 @@ def run_training():
                 index = 1
                 count = 0
                 while index * batch_size <= 117*45:
-                    s, ipos, ineg = next(data)
+                    s, ipos, ineg = next(test_data)
                     pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
                     print('Batch test: ', index)
