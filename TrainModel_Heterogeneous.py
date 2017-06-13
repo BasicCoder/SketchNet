@@ -128,6 +128,12 @@ def run_training():
         tf.summary.scalar('global step', global_step)
         tf.summary.scalar('learning_rate', learning_rate)
 
+    # Test correct order Accuray
+    with tf.name_scope('Accuracy') as scope:
+        less = tf.less(dist_pos, dist_neg, name ='Less')
+        batch_count = tf.reduce_sum(tf.cast(less, tf.float32))
+        batch_Accuracy = tf.divide(batch_count, 135.0)
+        tf.summary.scalar('Accuracy', batch_Accuracy)
 
     # Add the variable initializer Op to the graph
     init = tf.global_variables_initializer()
@@ -177,18 +183,20 @@ def run_training():
                 saver.save(sess, checkpoint_file, step)
                 print('Checkpoint Saved!')
             
-            if step % test_step == 0:
+            if step % test_step == 0:               
                 index = 1
                 count = 0
                 while index * batch_size <= 117*45:
                     s, ipos, ineg = next(test_data)
-                    pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                    b_count, b_Accuracy = sess.run([batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
                     print('Batch test: ', index)
-                    tmp = Test(pos_val = pos_val, neg_val = neg_val)
-                    count += tmp
+                    print('Batch total Accuracy : ' + '{:.09f}'.format(b_Accuracy))
+                    count += b_count
                     index += 1  
-                print('Total Accuracy : ', '{:.09f}'.format(count / (117*45)))                  
+                accuracy = count / (117*45)
+                print('Total Accuracy : ', '{:.09f}'.format(accuracy)) 
+
             step += 1
         
         print("Optimization Finished!")

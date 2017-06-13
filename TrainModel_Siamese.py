@@ -188,7 +188,9 @@ def run_training():
                     tmp = Test(pos_val = pos_val, neg_val = neg_val)
                     count += tmp
                     index += 1  
-                print('Total Accuracy : ', '{:.09f}'.format(count / (117*45)))
+                batch_accuracy = count / (117*45)
+                print('Total Accuracy : ', '{:.09f}'.format(batch_accuracy))
+
             step += 1
         
         print("Optimization Finished!")
