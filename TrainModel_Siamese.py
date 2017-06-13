@@ -17,6 +17,7 @@ training_iters = 135 * 2000
 batch_size = 135
 display_step = 5
 save_step = 200
+test_step = 400
 margin = 2.0 / 407
 dropout = 0.8
 beta = 1e-5
@@ -76,6 +77,27 @@ def Count(a, b):
         if a[i] < b[i]:
             count += 1
     return count
+
+def Test(sess, data, batch_size = 128):
+    
+    index = 1
+    count = 0
+    while index * batch_size <= 115*45:
+        s, ipos, ineg = next(data)
+
+        pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                                        images_pos_placeholder : ineg, keep_prob: 1.0})
+            
+        count1 = Count(pos_val[0:45], neg_val[0:45])
+        count2 = Count(pos_val[45:90], neg_val[45:90])
+        count3 = Count(pos_val[90:135], neg_val[45:90])
+        count += (count1 + count3 + count3)
+        print('Batch test: ', index)
+        print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + ' Second : ' + '{:.09f}'.format(count2 / 45.0) + ' Third : ' + '{:.09f}'.format(count3 / 45.0))
+        print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 135.0))
+        index += 1
+        
+    print('Total Accuracy : ', '{:.09f}'.format(count / (115*45)))
 
 def run_training():
     
@@ -143,6 +165,7 @@ def run_training():
         # train
         step = 1
         train_data = ReadData(sess, batch_size, is_train = True)
+        test_data = ReadData(sess, batch_size, is_train = False)
         while step * batch_size <= training_iters:
             s, ipos, ineg = next(train_data)
 
@@ -164,31 +187,17 @@ def run_training():
                 checkpoint_file = os.path.join(dir_name, 'ckpt', 'model.ckpt')
                 saver.save(sess, checkpoint_file, step)
                 print('Checkpoint Saved!')
+
+            if step % test_step == 0:
+                Test(sess, data = test_data, batch_size = batch_size)
             step += 1
         
         print("Optimization Finished!")
         
 
         # test 
-        test_data = ReadData(sess, batch_size, is_train = False)
-        index = 1
-        count = 0
-        while index * batch_size <= 115*45:
-            s, ipos, ineg = next(test_data)
+        Test(sess, data = test_data, batch_size = batch_size)
 
-            pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
-                                            images_pos_placeholder : ineg, keep_prob: 1.0})
-            
-            count1 = Count(pos_val[0:45], neg_val[0:45])
-            count2 = Count(pos_val[45:90], neg_val[45:90])
-            count3 = Count(pos_val[90:135], neg_val[45:90])
-            count += (count1 + count3 + count3)
-            print('Batch test: ', index)
-            print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + ' Second : ' + '{:.09f}'.format(count2 / 45.0) + ' Third : ' + '{:.09f}'.format(count3 / 45.0))
-            print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 135.0))
-            index += 1
-        
-        print('Total Accuracy : ', '{:.09f}'.format(count / (115*45)))
 
 if __name__ == '__main__':
     run_training()
