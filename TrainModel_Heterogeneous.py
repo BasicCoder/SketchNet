@@ -78,7 +78,7 @@ def Count(a, b):
             count += 1
     return count
 
-def Test(sess, data, batch_size = 128):
+def Test(sess, data, dist_pos, dist_neg, batch_size = 128):
     
     index = 1
     count = 0

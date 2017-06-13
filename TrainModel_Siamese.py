@@ -78,7 +78,7 @@ def Count(a, b):
             count += 1
     return count
 
-def Test(sess, data, batch_size = 128):
+def Test(sess, data, dist_pos, dist_neg, batch_size = 128):
     
     index = 1
     count = 0
@@ -196,7 +196,7 @@ def run_training():
         
 
         # test 
-        Test(sess, data = test_data, batch_size = batch_size)
+        Test(sess, data = test_data, dist_pos = dist_pos, dist_neg = dist_pos, batch_size = batch_size)
 
 
 if __name__ == '__main__':
