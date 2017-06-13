@@ -103,15 +103,12 @@ def run_training():
     tf.summary.tensor_summary("sketch_dense", sketch_dense)
     tf.summary.tensor_summary("image_pos_dense", image_pos_dense)
     tf.summary.tensor_summary("image_neg_dense", image_neg_dense)
-    print(sketch_dense.get_shape())
 
     
     # Euclidean Distance
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
     margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size])
-    print(dist_pos, dist_neg, margins)
-    shape_pos = tf.shape(dist_pos)
 
     with tf.name_scope('Loss') as scope:
         zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
@@ -191,14 +188,13 @@ def run_training():
                 count = 0
                 while index * batch_size <= 117*45:
                     s, ipos, ineg = next(test_data)
-                    shape_s, b_count, b_Accuracy = sess.run([shape_pos, batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                    b_count, b_Accuracy = sess.run([batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
                     print('Batch test: ', index)
                     print('Batch total Accuracy : ' + '{:.09f}'.format(b_Accuracy))
                     count += b_count
                     index += 1  
                 accuracy = count / (117*45)
-                print('Tensor Shape: ', shape_s)
                 print('Total Accuracy : ', '{:.09f}'.format(accuracy)) 
 
             step += 1
@@ -211,13 +207,14 @@ def run_training():
         count = 0
         while index * batch_size <= 117*45:
             s, ipos, ineg = next(test_data)
-            pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+            b_count, b_Accuracy = sess.run([batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
             print('Batch test: ', index)
-            tmp = Test(pos_val = pos_val, neg_val = neg_val)
-            count += tmp
+            print('Batch total Accuracy : ' + '{:.09f}'.format(b_Accuracy))
+            count += b_count
             index += 1  
-        print('Total Accuracy : ', '{:.09f}'.format(count / (117*45)))
+        accuracy = count / (117*45)
+        print('Total Accuracy : ', '{:.09f}'.format(accuracy))
 
 if __name__ == '__main__':
     run_training()

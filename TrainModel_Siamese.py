@@ -86,7 +86,7 @@ def Test(pos_val, neg_val):
     count += (count1 + count3 + count3) 
     print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + ' Second : ' + '{:.09f}'.format(count2 / 45.0) + ' Third : ' + '{:.09f}'.format(count3 / 45.0))
     print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 135.0))
-    return count
+    return count     
 
 def run_training():
     
@@ -104,11 +104,11 @@ def run_training():
     tf.summary.tensor_summary("image_pos_dense", image_pos_dense)
     tf.summary.tensor_summary("image_neg_dense", image_neg_dense)
 
+    
     # Euclidean Distance
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
     margins = tf.constant(margin, dtype = tf.float32, shape = [batch_size])
-    print(dist_pos, dist_neg, margins)
 
     with tf.name_scope('Loss') as scope:
         zeros = tf.constant(0.0, dtype = tf.float32, shape = [batch_size])
@@ -128,6 +128,12 @@ def run_training():
         tf.summary.scalar('global step', global_step)
         tf.summary.scalar('learning_rate', learning_rate)
 
+    # Test correct order Accuray
+    with tf.name_scope('Accuracy') as scope:
+        less = tf.less(dist_pos, dist_neg, name ='Less')
+        batch_count = tf.reduce_sum(tf.cast(less, tf.float32))
+        batch_Accuracy = tf.divide(batch_count, 135.0)
+        tf.summary.scalar('Accuracy', batch_Accuracy)
 
     # Add the variable initializer Op to the graph
     init = tf.global_variables_initializer()
@@ -176,20 +182,20 @@ def run_training():
                 checkpoint_file = os.path.join(dir_name, 'ckpt', 'model.ckpt')
                 saver.save(sess, checkpoint_file, step)
                 print('Checkpoint Saved!')
-
-            if step % test_step == 0:
+            
+            if step % test_step == 0:               
                 index = 1
                 count = 0
                 while index * batch_size <= 117*45:
                     s, ipos, ineg = next(test_data)
-                    pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                    b_count, b_Accuracy = sess.run([batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
                     print('Batch test: ', index)
-                    tmp = Test(pos_val = pos_val, neg_val = neg_val)
-                    count += tmp
+                    print('Batch total Accuracy : ' + '{:.09f}'.format(b_Accuracy))
+                    count += b_count
                     index += 1  
-                batch_accuracy = count / (117*45)
-                print('Total Accuracy : ', '{:.09f}'.format(batch_accuracy))
+                accuracy = count / (117*45)
+                print('Total Accuracy : ', '{:.09f}'.format(accuracy)) 
 
             step += 1
         
@@ -201,14 +207,14 @@ def run_training():
         count = 0
         while index * batch_size <= 117*45:
             s, ipos, ineg = next(test_data)
-            pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+            b_count, b_Accuracy = sess.run([batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
             print('Batch test: ', index)
-            tmp = Test(pos_val = pos_val, neg_val = neg_val)
-            count += tmp
+            print('Batch total Accuracy : ' + '{:.09f}'.format(b_Accuracy))
+            count += b_count
             index += 1  
-        print('Total Accuracy : ', '{:.09f}'.format(count / (117*45)))
-
+        accuracy = count / (117*45)
+        print('Total Accuracy : ', '{:.09f}'.format(accuracy))
 
 if __name__ == '__main__':
     run_training()
