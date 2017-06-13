@@ -17,7 +17,7 @@ training_iters = 135 * 2000
 batch_size = 135
 display_step = 5
 save_step = 200
-test_step = 5
+test_step = 50
 margin = 2.0 / 407
 dropout = 0.8
 beta = 1e-5
@@ -87,7 +87,6 @@ def Test(pos_val, neg_val):
     print('Testing Accuracy: First : ' + '{:.09f}'.format(count1 / 45.0) + ' Second : ' + '{:.09f}'.format(count2 / 45.0) + ' Third : ' + '{:.09f}'.format(count3 / 45.0))
     print('Batch total Accuracy : ' + '{:.09f}'.format((count1 + count2 + count3)/ 135.0))
     return count     
-    #print('Total Accuracy : ', '{:.09f}'.format(count / (115*45)))
 
 def run_training():
     
@@ -199,7 +198,7 @@ def run_training():
         index = 1
         count = 0
         while index * batch_size <= 117*45:
-            s, ipos, ineg = next(data)
+            s, ipos, ineg = next(test_data)
             pos_val, neg_val = sess.run([dist_pos, dist_neg], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
             print('Batch test: ', index)
