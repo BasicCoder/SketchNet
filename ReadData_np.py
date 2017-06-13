@@ -166,7 +166,7 @@ if __name__ == '__main__':
         plt.show()
         '''
 
-        a = ReadData(sess, 5, False)
+        a = ReadData(sess, 5, True)
         i = 0
         s, ipos, ineg = next(a)
         while i < 5:
