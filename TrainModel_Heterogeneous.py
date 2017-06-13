@@ -17,7 +17,7 @@ training_iters = 135 * 2000
 batch_size = 135
 display_step = 5
 save_step = 200
-test_step = 300
+test_step = 5
 margin = 2.0 / 407
 dropout = 0.8
 beta = 1e-5
@@ -79,7 +79,11 @@ def Count(a, b):
     return count
 
 def Test(sess, data, dist_pos, dist_neg, batch_size = 128):
-    
+
+    sketchs_placeholder = tf.placeholder(tf.float32)
+    images_neg_placeholder = tf.placeholder(tf.float32)
+    images_pos_placeholder = tf.placeholder(tf.float32)
+    keep_prob = tf.placeholder(tf.float32)
     index = 1
     count = 0
     while index * batch_size <= 115*45:

@@ -80,6 +80,10 @@ def Count(a, b):
 
 def Test(sess, data, dist_pos, dist_neg, batch_size = 128):
     
+    sketchs_placeholder = tf.placeholder(tf.float32)
+    images_neg_placeholder = tf.placeholder(tf.float32)
+    images_pos_placeholder = tf.placeholder(tf.float32)
+    keep_prob = tf.placeholder(tf.float32)
     index = 1
     count = 0
     while index * batch_size <= 115*45:
