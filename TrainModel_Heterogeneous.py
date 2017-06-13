@@ -13,12 +13,12 @@ from ImageNetNeg import ImageNetNeg
 
 data_name = ''
 learning_rate_init = 0.01
-training_iters = 135 * 2000
+training_iters = 135 * 1000
 batch_size = 135
 display_step = 5
 save_step = 200
 test_step = 50
-margin = 2.0 / 407
+margin = 6.0 / 407
 dropout = 0.8
 beta = 1e-5
 
@@ -104,6 +104,7 @@ def run_training():
     tf.summary.tensor_summary("image_pos_dense", image_pos_dense)
     tf.summary.tensor_summary("image_neg_dense", image_neg_dense)
 
+    shape_sketch = tf.shape(sketch_dense)
     # Euclidean Distance
     dist_pos = EuclideanDist(sketch_dense, image_pos_dense)
     dist_neg = EuclideanDist(sketch_dense, image_neg_dense)
@@ -188,13 +189,14 @@ def run_training():
                 count = 0
                 while index * batch_size <= 117*45:
                     s, ipos, ineg = next(test_data)
-                    b_count, b_Accuracy = sess.run([batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
+                    shape_s, b_count, b_Accuracy = sess.run([shape_sketch, batch_count, batch_Accuracy], feed_dict = {sketchs_placeholder : s, images_neg_placeholder : ipos, 
                                                 images_pos_placeholder : ineg, keep_prob: 1.0})
                     print('Batch test: ', index)
                     print('Batch total Accuracy : ' + '{:.09f}'.format(b_Accuracy))
                     count += b_count
                     index += 1  
                 accuracy = count / (117*45)
+                print('Tensor Shape: ', shape_s)
                 print('Total Accuracy : ', '{:.09f}'.format(accuracy)) 
 
             step += 1
